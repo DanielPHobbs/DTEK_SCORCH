@@ -1,4 +1,4 @@
-$serviceURL = "http://orch2012sp1:81/Orchestrator2012/Orchestrator.svc";
+$serviceURL = "http://dtekorch16-s1:81/Orchestrator2012/Orchestrator.svc";
 $runbookPath = "\DCS - Automation Library\Component Runbooks\SystemCenter\Virtual Machine Manager\1.0\Get VMM User Role";
 $parameters = @{"VMM Server Name" = "VMM2012SP1.dcs.corp"; "User Role Name" = "TenantAdmin1"}
 
