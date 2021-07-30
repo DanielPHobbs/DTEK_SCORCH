@@ -1,0 +1,1 @@
+Just right-click "SMART-DocumentationConversionHelper.ps1" and select "Run with PowerShell"!

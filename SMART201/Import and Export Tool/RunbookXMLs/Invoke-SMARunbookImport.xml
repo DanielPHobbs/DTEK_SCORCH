@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Runbook>
+  <Name>Invoke-SMARunbookImport</Name>
+  <Tag>Type:Process, Proj:SMART March 2014 Update</Tag>
+  <Configuration>
+    <Description>Process Level Runbook to Execute SMA Import</Description>
+    <LogDebug>False</LogDebug>
+    <LogVerbose>False</LogVerbose>
+    <LogProgress>False</LogProgress>
+  </Configuration>
+  <Published>
+    <Definition>workflow Invoke-SMARunbookImport
+{
+    # Bulk Import from Directory with PS1 Files
+    # Update ImportDirectory to reflect Runbook XML location
+    # Update WebServiceEndpoint to reflect SMA Server
+    $ImportDirectory = "C:\Scripts\SMART\Tenant Provisioning POC"
+    $WebServiceEndpoint = "https://localhost"
+    $Files = Get-ChildItem -path $ImportDirectory -File
+    
+    # Build Array of Runbooks to Publish
+    $RunbookArray=@()
+    
+    # We'll run through import, publish, edit, publish with two iterations of the while loop
+    $i = 0
+    while($i -le 1 )
+    {
+        # Process each Runbook in importdirectory location specified
+        foreach($File in $Files)
+        {
+            # Only Process XML and PS1
+            if($File.extension -match "XML" -or $File.extension -match "PS1")
+            {
+                $RunbookName = Import-SMARunbookfromXMLorPS1 -ImportDirectory $ImportDirectory -FileName $File.Name `
+                -RunbookState "Published" -ImportAssets $True -EnableScriptOutput $True
+                $RunbookArray+=$RunbookName
+            }
+        }
+        
+        # Publish all Runbooks (post import to ensure child/partent relationshipo in tact)
+        foreach($Runbook in $RunbookArray)
+        {
+            if($Runbook)
+            {
+                $PublishedRunbook = Publish-SMARunbook -Name $Runbook -WebServiceEndpoint $WebServiceEndpoint
+            }
+        }
+        $i++
+    }
+}
+</Definition>
+  </Published>
+  <Draft>
+    <Definition>Draft Not Unique</Definition>
+  </Draft>
+</Runbook>

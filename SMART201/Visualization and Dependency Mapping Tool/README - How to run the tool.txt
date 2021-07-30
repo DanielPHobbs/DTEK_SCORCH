@@ -1,0 +1,1 @@
+Just right-click "SMART-VT.ps1" and select "Run with PowerShell"!

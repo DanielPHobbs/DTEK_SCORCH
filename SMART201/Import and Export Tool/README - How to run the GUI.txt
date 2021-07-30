@@ -1,0 +1,1 @@
+Just right-click "SMART-IE-GUI.ps1" and select "Run with PowerShell"!

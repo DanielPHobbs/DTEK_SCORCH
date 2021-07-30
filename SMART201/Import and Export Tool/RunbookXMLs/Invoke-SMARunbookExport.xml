@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Runbook>
+  <Name>Invoke-SMARunbookExport</Name>
+  <Tag>Type:Process, Proj:SMART March 2014 Update</Tag>
+  <Configuration>
+    <Description>Process Level Runbook to Execute SMA Export</Description>
+    <LogDebug>False</LogDebug>
+    <LogVerbose>False</LogVerbose>
+    <LogProgress>False</LogProgress>
+  </Configuration>
+  <Published>
+    <Definition>workflow Invoke-SMARunbookExport
+{
+    # Update to your preferred output directory
+    $ExportDirectory = "C:\Scripts\Exports\{0}" -f (Get-Date -Format "MMMddyyyy")
+    $WebServiceEndpoint = "https://localhost"
+
+    # Example below with logic on Runbook Name
+    #$RunbooksToProcess = Get-SmaRunbook -WebServiceEndpoint "https://localhost" | Where-Object -Match -Property RunbookName -Value "Export-SMARunbookToXML" 
+    
+    # Below gets all runbooks and exports them to the above directory (use where clause for granularity) 
+    $RunbooksToProcess = Get-SmaRunbook -WebServiceEndpoint $WebServiceEndpoint
+    foreach($RB in $RunbooksToProcess)
+    {
+        Export-SMARunbooktoXML -RunbookName $Rb.RunbookName -ExportDirectory $ExportDirectory `
+        -WebServiceEndpoint $WebServiceEndpoint -EnableScriptOutput $True `
+        -ExportPS1 $True -ExportVars $False -ExportCreds $False -ExportSchedules $False `
+        -ExportAssets $True -ExportSecrets $True
+    }
+}
+</Definition>
+  </Published>
+  <Draft>
+    <Definition>Draft Not Unique</Definition>
+  </Draft>
+</Runbook>
