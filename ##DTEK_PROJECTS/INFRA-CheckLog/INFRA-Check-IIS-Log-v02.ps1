@@ -57,7 +57,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
 
         ##################################################### MAIN CODE ##################################################################
        
-        $$computername="dtekaz-hw01.dtek.com"
+        $computername="dtekaz-hw01.dtek.com"
 
 
 
@@ -66,7 +66,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
          try {
          If(Test-WSMan -ComputerName $ComputerName){
         
-        $Session = New-PSSession -ComputerName $ComputerName
+        $RMSession = New-PSSession -ComputerName $ComputerName
         AppendLog  "Connected PSSession"
          }
          }
@@ -80,7 +80,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
          #############################################################
          appendlog "Gathering log file(s)"
         
-         $LogContent=Invoke-Command -Session $Session -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log }
+         $LogContent=Invoke-Command -Session $RMSession -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log }
          $myCustomVariable = $LogContent
 
          $myCustomVariable
@@ -152,3 +152,4 @@ Error Message	            String	    ErrorMessage	false
 Trace Log	                String	    Trace	        false
 My Custom Published Data	String	    MyCustomVariable	false
 #>
+$trace
