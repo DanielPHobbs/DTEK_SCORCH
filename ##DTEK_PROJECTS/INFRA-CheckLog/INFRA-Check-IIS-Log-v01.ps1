@@ -56,28 +56,40 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         AppendLog "Parameter values received: DataBusInput1=[$DataBusInput1]; DataBusInput2=[$DataBusInput2]"
 
         ##################################################### MAIN CODE ##################################################################
-
-        # The actual work the script does goes here
-        AppendLog "Doing first action"
-        # Do-Stuff -Value $DataBusInput1
-
-        AppendLog "Doing second action"
-        # Do-MoreStuff -Value $DataBusInput2
-
-        # Simulate a possible error
-        if($DataBusInput1 -ilike "*bad stuff*")
-        {
-            throw "ERROR: Encountered bad stuff in the parameter input"
+        $computername="dtekaz-hw01.dtek.com"
+        
+        AppendLog  "Testing WSMan connection and creating session..."
+        #Test-WSMan Connection
+        try {
+        If(Test-WSMan -ComputerName $ComputerName){
+       
+       $Session = New-PSSession -ComputerName $ComputerName
+       AppendLog "Connected PSSession"
         }
-
-        # Example of custom result value
-        $myCustomVariable = "Something I want to publish back to the runbook data bus"
-
+        }
+        catch {
+        
+        $_.Exception.Message
+        AppendLog -Message "Unable to contact remote computer via WinRM, is Powershell Remoting enabled?"
+        Break
+        
+        }
+        #############################################################
+        AppendLog  "Gathering log file(s)"
+       
+        $LogContent=Invoke-Command -Session $Session -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log }
+        $myCustomVariable = $LogContent
+        $EverythingWorked = $true
+        ##############################################################
+       
+        Write-output "Cleaning up remote session."
+        Get-PSSession | Remove-PSSession
+        
         ###################################################################################################################################
 
         # Validate results and set return status
         AppendLog "Finished work, determining result"
-        $EverythingWorked = $true
+        
         if($EverythingWorked -eq $true)
         {
            $ResultStatus = "Success"
