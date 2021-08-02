@@ -82,8 +82,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         $EverythingWorked = $true
         ##############################################################
        
-        Write-output "Cleaning up remote session."
-        Get-PSSession | Remove-PSSession
+        
         
         ###################################################################################################################################
 
