@@ -56,33 +56,21 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         AppendLog "Parameter values received: DataBusInput1=[$DataBusInput1]; DataBusInput2=[$DataBusInput2]"
 
         ##################################################### MAIN CODE ##################################################################
+       
         $computername="dtekaz-hw01.dtek.com"
         
-        AppendLog  "Testing WSMan connection and creating session..."
-        #Test-WSMan Connection
-        try {
-        If(Test-WSMan -ComputerName $ComputerName){
-       
-       $Session = New-PSSession -ComputerName $ComputerName
-       AppendLog "Connected PSSession"
-        }
-        }
-        catch {
         
-        $_.Exception.Message
-        AppendLog -Message "Unable to contact remote computer via WinRM, is Powershell Remoting enabled?"
-        Break
-        
-        }
         #############################################################
         AppendLog  "Gathering log file(s)"
        
-        $LogContent=Invoke-Command -Session $Session -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log }
+        $LogContent=Invoke-Command -ComputerName $computername -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log }
         $myCustomVariable = $LogContent
+
+        $myCustomVariable
         $EverythingWorked = $true
         ##############################################################
        
-        
+    
         
         ###################################################################################################################################
 
@@ -139,7 +127,7 @@ $MyCustomVariable = $ReturnArray[3]
 $Trace += (Get-Date).ToString() + "`t" + "Script finished" + " `r`n"
 
 # Close the external session
-Remove-PSSession $Session
+Get-PSSession | Remove-PSSession 
 
 <#
 https://automys.com/library/asset/powershell-system-center-orchestrator-practice-template
