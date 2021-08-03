@@ -59,25 +59,17 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
        
         $computername="dtekaz-hw01.dtek.com"
         
+        Install-Module -Name Invoke-PSSession
+
         
-        AppendLog  "Testing WSMan connection and creating session..."
-         #Test-WSMan Connection
-         try {
-         If(Test-WSMan -ComputerName $ComputerName){
-        
-        $RMSession = New-PSSession -ComputerName $ComputerName
-        AppendLog  "Connected PSSession"
-         }
-         }
-         catch {
+         ##############################################################
+         #Create PSCredentials
+
          
-         $_.Exception.Message
-         appendlog "Unable to contact remote computer via WinRM, is Powershell Remoting enabled?"
-         Break
-         
-         }
          #############################################################
          appendlog "Gathering log file(s)"
+
+         $RMSession = Invoke-PSSession -ComputerName $computername -Credential $PSCredential
         
          $LogContent=Invoke-Command -Session $RMSession -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log } 
          $myCustomVariable = $LogContent

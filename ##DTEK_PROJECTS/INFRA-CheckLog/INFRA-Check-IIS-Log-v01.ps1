@@ -63,7 +63,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         #############################################################
         AppendLog  "Gathering log file(s)"
        
-        $LogContent=Invoke-Command -ComputerName $computername -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log }
+        $LogContent=Invoke-Command -ComputerName $computername -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log } -authentication Kerberos
         $myCustomVariable = $LogContent
 
         $myCustomVariable

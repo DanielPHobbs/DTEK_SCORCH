@@ -23,8 +23,6 @@
 
 $computername="dtekaz-hw01.dtek.com"
 
-
-
 Write-output  "Testing WSMan connection and creating session..."
  #Test-WSMan Connection
  try {
@@ -45,7 +43,7 @@ Write-output  "Connected PSSession"
  Write-output  "Gathering log file(s)"
 
  $LogContent=Invoke-Command -Session $Session -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log }
- #LogContent
+ $LogContent
  ##############################################################
 
  Write-output "Cleaning up remote session."
