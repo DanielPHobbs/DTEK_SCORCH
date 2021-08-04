@@ -58,15 +58,16 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         ##################################################### MAIN CODE ##################################################################
        
         $computername="dtekaz-hw01.dtek.com"
-        
+        $User = "DTEK\danny"
+        $File = "C:\secure\danny.txt"
+        $PSCredential=New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, (Get-Content $File | ConvertTo-SecureString)
         
         #############################################################
         AppendLog  "Gathering log file(s)"
        
-        $LogContent=Invoke-Command -ComputerName $computername -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log } -authentication Kerberos
-        $myCustomVariable = $LogContent
-
-        $myCustomVariable
+        $myCustomVariable=Invoke-Command -ComputerName $computername  -ScriptBlock { Get-Content -path F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log -Tail 20 } -Credential $PSCredential -Authentication Credssp
+        
+        
         $EverythingWorked = $true
         ##############################################################
        
@@ -137,3 +138,4 @@ Error Message	            String	    ErrorMessage	false
 Trace Log	                String	    Trace	        false
 My Custom Published Data	String	    MyCustomVariable	false
 #>
+

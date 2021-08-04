@@ -76,7 +76,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
          Break
          
          }
-         #############################################################
+        
          appendlog "Gathering log file(s)"
         
          $LogContent=Invoke-Command -Session $RMSession -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log } 
