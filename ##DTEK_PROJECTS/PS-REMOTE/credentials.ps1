@@ -1,4 +1,4 @@
-
+#https://duffney.io/addcredentialstopowershellfunctions/
 $Global:sesssion = ""
 $Global:server="dtekaz-hw01.dtek.com"
 
@@ -10,4 +10,4 @@ $Global:server="dtekaz-hw01.dtek.com"
 	#$Global:session = New-PSSession -ComputerName $Global:server -Credential $cred
     #Invoke-Command -Session $Global:session -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log -top 5} 
 
-    Invoke-Command -computername $Global:server - credential $cred -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log -top 5} 
+    Invoke-Command -computername $Global:server -credential $cred -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log -tail 5} 
