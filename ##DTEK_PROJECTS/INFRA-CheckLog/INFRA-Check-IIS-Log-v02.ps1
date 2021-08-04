@@ -57,7 +57,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
 
         ##################################################### MAIN CODE ##################################################################
        
-        $computername="dtekaz-hw01.dtek.com"
+        
         
         
         AppendLog  "Testing WSMan connection and creating session..."
