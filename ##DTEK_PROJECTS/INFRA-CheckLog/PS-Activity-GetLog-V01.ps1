@@ -109,7 +109,7 @@ logcontent              	Array	    logcontent 	    $true
 foreach ($item in $logtext.Split("`n")){
     
     [STRING]$logline =$item
-    $logline
+    #$logline
     }
 #$logline=$logline.Split("`n")
 #$logline
