@@ -40,7 +40,7 @@ $Trace = (Get-Date).ToString() + "`t" + "Runbook activity script started" + " `r
 
         
         AppendLog "Entering session to get Logs"
-        $logcontent=Invoke-Command -computername $computerName  -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log -tail 5} 
+        $logtext=Invoke-Command -computername $computerName  -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log -tail 5} 
         
         $EverythingWorked="true"
         ###################################################################################################################################
@@ -86,9 +86,30 @@ AppendLog  "Script finished"
 Name	                    Type	    Variable	    Is Collection
 Result Status	            String	    ResultStatus	false
 Error Message	            String	    ErrorMessage	false
-Trace Log	                String	    Trace	        false
-$logcontent             	String	    $logcontent 	false
+Trace Log	                String	    TraceLog	    false
+logcontent              	Array	    logcontent 	    $true
 #>
-$Tracelog
+
+#$Tracelog
 #$errormessage
+#$logtext.gettype()
+
+#$LogLine = [System.Collections.ArrayList]::new()
+#[void]$logline.Add($logtext.foreach{"Item [$PSItem]"})
+
+#$LogLine.GetType()
+#$logline
+
+#$logcontent += $logtext.foreach{"Item [$PSItem]"}
 #$logcontent
+
+#foreach ($item in $logtext){[STRING]$logline=$item;$logline}
+
+
+foreach ($item in $logtext.Split("`n")){
+    
+    [STRING]$logline =$item
+    $logline
+    }
+#$logline=$logline.Split("`n")
+#$logline
