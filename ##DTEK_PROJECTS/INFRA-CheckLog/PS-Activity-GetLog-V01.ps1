@@ -42,6 +42,7 @@ $Trace = (Get-Date).ToString() + "`t" + "Runbook activity script started" + " `r
         AppendLog "Entering session to get Logs"
         $logtext=Invoke-Command -computername $computerName  -ScriptBlock { Get-Content F:\inetpub\logs\logfiles\W3SVC1\u_ex210414.log -tail 5} 
         
+        
         $EverythingWorked="true"
         ###################################################################################################################################
 
@@ -90,26 +91,19 @@ Trace Log	                String	    TraceLog	    false
 logcontent              	Array	    logcontent 	    $true
 #>
 
-#$Tracelog
-#$errormessage
-#$logtext.gettype()
+### Process ###
+$Logs=@()
+$loglines=$logtext.Split("`n")
 
-#$LogLine = [System.Collections.ArrayList]::new()
-#[void]$logline.Add($logtext.foreach{"Item [$PSItem]"})
+foreach ($item in $loglines)
 
-#$LogLine.GetType()
-#$logline
-
-#$logcontent += $logtext.foreach{"Item [$PSItem]"}
-#$logcontent
-
-#foreach ($item in $logtext){[STRING]$logline=$item;$logline}
+{
+$logs += $item
+}
+$logs = [string[]]$logs
 
 
-foreach ($item in $logtext.Split("`n")){
-    
-    [STRING]$logline =$item
-    #$logline
-    }
-#$logline=$logline.Split("`n")
-#$logline
+#$loglines.GetType()
+#$logs.gettype()
+
+#$logs
