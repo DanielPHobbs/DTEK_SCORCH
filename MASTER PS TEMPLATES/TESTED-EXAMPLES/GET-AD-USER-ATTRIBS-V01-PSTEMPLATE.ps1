@@ -1,8 +1,8 @@
 # Set script parameters from runbook data bus and Orchestrator global variables
 # Define any inputs here and then add to the $argsArray and script block parameters below 
 
-$DataBusInput1 = "{Parameter 1 from Initialize Data}"
-$DataBusInput2 = "{Global Variable 1}"
+$DataBusInput1 = "dhobbs-adm"
+$DataBusInput2 = "DTEK.COM"
 
 
 #-----------------------------------------------------------------------
@@ -62,7 +62,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         Import-Module ActiveDirectory
 
 
-        AppendLog "Doing second action"
+        AppendLog "Getting User Attributes from Active Directory"
         # Do-MoreStuff -Value $DataBusInput2
 
         # Simulate a possible error
@@ -72,6 +72,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         }
 
         # Example of custom result value
+        
         $myCustomVariable = "Something I want to publish back to the runbook data bus"
 
         ###################################################################################################################################
