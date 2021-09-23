@@ -20,9 +20,11 @@ $argsArray = @()
 $argsArray += $DataBusInput1
 $argsArray += $DataBusInput2
 
-# Establish an external session (to localhost) to ensure 64bit PowerShell runtime using the latest version of PowerShell installed on the runbook server
 # Use this session to perform all work to ensure latest PowerShell features and behavior available
-$Session = New-PSSession -ComputerName localhost
+
+# Must Use CREDSSP if session is run on Localhost going to DC due to Kerberos delegation issues, otherwise  run session on DC to obtain rquired data 
+
+$Session = New-PSSession -ComputerName "dtekad05.dtek.com"
 
 # Invoke-Command used to start the script in the external session. Variables returned by script are then stored in the $ReturnArray variable
 $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -ScriptBlock {
@@ -57,23 +59,22 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
 
         ##################################################### MAIN CODE ##################################################################
 
-        # The actual work the script does goes here
+       
         AppendLog "Load Modules and Enviroment"
         Import-Module ActiveDirectory
 
 
         AppendLog "Getting User Attributes from Active Directory"
-        # Do-MoreStuff -Value $DataBusInput2
-
+        
+        $UserProperties=Get-ADUser -Identity $DataBusInput1  -Properties *
+        
         # Simulate a possible error
         if($DataBusInput1 -ilike "*bad stuff*")
         {
             throw "ERROR: Encountered bad stuff in the parameter input"
         }
 
-        # Example of custom result value
-        
-        $myCustomVariable = "Something I want to publish back to the runbook data bus"
+       
 
         ###################################################################################################################################
 
@@ -115,7 +116,7 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
     $resultArray += $ResultStatus
     $resultArray += $ErrorMessage
     $resultArray += $script:TraceLog
-    $resultArray += $myCustomVariable
+    $resultArray += $UserProperties
     return  $resultArray  
      
 }#End Invoke-Command
@@ -124,13 +125,21 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
 $ResultStatus = $ReturnArray[0]
 $ErrorMessage = $ReturnArray[1]
 $Trace += $ReturnArray[2]
-$MyCustomVariable = $ReturnArray[3]
+$UserProperties = $ReturnArray[3]
 
 # Record end of activity script process
 $Trace += (Get-Date).ToString() + "`t" + "Script finished" + " `r`n"
 
 # Close the external session
 Remove-PSSession $Session
+
+#Display Results
+Write-output "Resultstatus: $ResultStatus"
+Write-output "Error Message: $errorMessage"
+Write-output "Script Trace: $Trace" 
+Write-output "User Properties: $UserProperties" 
+
+
 
 <#
 https://automys.com/library/asset/powershell-system-center-orchestrator-practice-template
