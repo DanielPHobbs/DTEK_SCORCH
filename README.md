@@ -1,1 +1,0 @@
-# DTEK_SCORCH
