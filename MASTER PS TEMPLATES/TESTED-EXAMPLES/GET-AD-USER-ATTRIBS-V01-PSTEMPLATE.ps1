@@ -24,7 +24,13 @@ $argsArray += $DataBusInput2
 
 # Must Use CREDSSP if session is run on Localhost going to DC due to Kerberos delegation issues, otherwise  run session on DC to obtain rquired data 
 
-$Session = New-PSSession -ComputerName "dtekad05.dtek.com"
+# This gets an available DC in domain
+$DC=Get-ADDomainController -Discover -Domain "dtek.com"
+
+#This gets an available DC in specific site
+#$DC=Get-ADDomainController -Discover -Site "LondonHQ" -ForceDiscover
+
+$Session = New-PSSession -ComputerName $DC
 
 # Invoke-Command used to start the script in the external session. Variables returned by script are then stored in the $ReturnArray variable
 $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -ScriptBlock {
@@ -58,7 +64,8 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         AppendLog "Parameter values received: DataBusInput1=[$DataBusInput1]; DataBusInput2=[$DataBusInput2]"
 
         ##################################################### MAIN CODE ##################################################################
-
+        ##################################################################################################################################
+       
        
         AppendLog "Load Modules and Enviroment"
         Import-Module ActiveDirectory
@@ -67,15 +74,12 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
         AppendLog "Getting User Attributes from Active Directory"
         
         $UserProperties=Get-ADUser -Identity $DataBusInput1  -Properties *
-        
-        # Simulate a possible error
-        if($DataBusInput1 -ilike "*bad stuff*")
-        {
-            throw "ERROR: Encountered bad stuff in the parameter input"
-        }
-
        
-
+        $UserCanonicalName=$UserProperties.CanonicalName
+        $Useraddress=$UserProperties.StreetAddress
+        
+        
+        ###################################################################################################################################
         ###################################################################################################################################
 
         # Validate results and set return status
@@ -116,7 +120,8 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
     $resultArray += $ResultStatus
     $resultArray += $ErrorMessage
     $resultArray += $script:TraceLog
-    $resultArray += $UserProperties
+    $resultArray += $UserCanonicalName
+    $resultArray += $UserAddress
     return  $resultArray  
      
 }#End Invoke-Command
@@ -125,8 +130,8 @@ $ReturnArray = Invoke-Command -Session $Session -Argumentlist $argsArray -Script
 $ResultStatus = $ReturnArray[0]
 $ErrorMessage = $ReturnArray[1]
 $Trace += $ReturnArray[2]
-$UserProperties = $ReturnArray[3]
-
+$UserCAN = $ReturnArray[3]
+$UserADDR = $ReturnArray[4]
 # Record end of activity script process
 $Trace += (Get-Date).ToString() + "`t" + "Script finished" + " `r`n"
 
@@ -137,7 +142,10 @@ Remove-PSSession $Session
 Write-output "Resultstatus: $ResultStatus"
 Write-output "Error Message: $errorMessage"
 Write-output "Script Trace: $Trace" 
-Write-output "User Properties: $UserProperties" 
+Write-output "User Canonical Name:$UserCAN"
+Write-output "User Address: $UserADDR"
+
+
 
 
 

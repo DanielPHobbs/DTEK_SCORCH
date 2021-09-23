@@ -5,14 +5,16 @@
 #Enable-WSManCredSSP -Role Server –Force
 
 
-$DataBusInput1="dhobbs-adm"
 
-Invoke-Command -ComputerName "dtekadmin3.dtek.com" -ScriptBlock {
+
+Invoke-Command -ComputerName "dtekad05.dtek.com" -ScriptBlock {
     
     Import-Module ActiveDirectory
-    
-    Get-ADUser -Identity "dhobbs-adm" -Server "dtekad05.dtek.com"  -Properties *
+    $UserProperties=@()
+    $UserProperties=Get-ADUser -Identity "dhobbs-adm"  -Properties *
 
+    $UserCanonicalName=$UserProperties.CanonicalName
+    $Useraddress=$UserProperties.StreetAddress
  }
 
  <#
