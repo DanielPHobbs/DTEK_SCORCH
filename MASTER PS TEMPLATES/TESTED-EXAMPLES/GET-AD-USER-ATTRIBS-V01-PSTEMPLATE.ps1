@@ -142,6 +142,7 @@ Remove-PSSession $Session
 Write-output "Resultstatus: $ResultStatus"
 Write-output "Error Message: $errorMessage"
 Write-output "Script Trace: $Trace" 
+#Data
 Write-output "User Canonical Name:$UserCAN"
 Write-output "User Address: $UserADDR"
 
