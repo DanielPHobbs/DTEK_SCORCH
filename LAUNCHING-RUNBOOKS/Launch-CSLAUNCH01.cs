@@ -76,11 +76,11 @@ private static Job StartRunbookJob(string serviceURL, Guid runbookID,
 static void Main(string[] args)
 {
     // Begin change values
-    string serviceURL = "http://orch2012sp1:81/Orchestrator2012/Orchestrator.svc";
-    string runbookPath = @"\DCS - Automation Library\Component Runbooks\SystemCenter\Virtual Machine Manager\1.0\Get VMM User Role";
+    string serviceURL = "http://dtekorch16-s1:81/Orchestrator2012/Orchestrator.svc";
+    string runbookPath = @"\4.DTEK PROJECTS\LAUNCH-TEST\CS-LAUNCH01";
     Hashtable parameters = new Hashtable();
-    parameters["VMM Server Name"] = "VMM2012SP1.dcs.corp";
-    parameters["User Role Name"] = "TenantAdmin1";
+    parameters["recipient"] = "danny@dtek.com";
+    parameters["message"] = "Launched CSLAUNCH01 runbook";
     // End change values
 
     Runbook runbook = GetRunbookByPath(serviceURL, runbookPath);
