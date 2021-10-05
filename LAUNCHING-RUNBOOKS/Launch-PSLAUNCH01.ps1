@@ -63,7 +63,7 @@ $fullUrl = [String]::Format("{0}/Jobs", $serviceURL);
 $request = [System.Net.HttpWebRequest]::Create($fullUrl)
 
 # Set the credentials to default or prompt for credentials
-$request.UseDefaultCredentials = $true
+$request.UseDefaultCredentials = $false
 
 # Build the request header
 $request.Method = "POST"
