@@ -1,0 +1,6 @@
+use SCORCHPersistantDB
+SELECT Displayname,
+ActivityName,
+Activitystatus
+from StateTracking02
+where displayname ='alec guiness';

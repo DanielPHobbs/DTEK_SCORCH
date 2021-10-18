@@ -1,3 +1,4 @@
+Use SCORCHPersistantDB
 CREATE TABLE StateTracking01 (
     Guid			varchar(255) NOT NULL,
 	RunCount		int,
@@ -8,7 +9,7 @@ CREATE TABLE StateTracking01 (
 	ExchangeMB		varchar(255),
 	GroupMembership varchar(255),
     ActivityName	varchar(255),
-	ActivityStatus	DATETIME,
+	ActivityStatus	varchar(255),
 	AvctivityStart	DATETIME,
 	ActivityEnd		DATETIME,
 	ErrorSeverity	varchar(255),
