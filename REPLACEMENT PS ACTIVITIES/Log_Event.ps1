@@ -56,7 +56,9 @@ Write-EventLog -LogName $EventlogName `
 -RawData 10,20
 
 $ResultStatus = "Success"
-throw "Bad thing happened"
+
+#throw "Bad thing happened"
+$a=1/0
 
 $stopwatch.Stop()
 $scripttime=$stopwatch.Elapsed.totalseconds
@@ -68,11 +70,15 @@ Catch{
 
     $EMessage=$_.Exception.Message
     $ELine=$_.InvocationInfo.line
+    $ELine=($ELine).Replace("`r`n","")
     $ELNum=$_.InvocationInfo.ScriptLineNumber
+    $EInnermessage=$_.Exception.InnerException
     
-    AppendLog  "Err Message  --  $EMessage "
-    AppendLog  "Err Command -- $ELine"
-    AppendLog  "Err Line    --  $ELNum"
+    AppendLog  "!!!!!Exception In Script!!!!!"
+    AppendLog  "Error Message  --  $EMessage "
+    AppendLog  "Inner Error Message  --  $EInnermessage "
+    AppendLog  "Err Command -- [$ELine] on Line $ELNum"
+    
 
 }finally{
     $stopwatch.Stop() 
