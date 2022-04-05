@@ -1,41 +1,35 @@
 #-----------------------------------------------
-#   SCORCH 'Write EventLog Entry' Activity Powershell Replacement
+#   SCORCH 'Standard Powershell Activity Wrapper' 
 # Examples:
-#Eventlogsource     Scorch
-#EventlogName       Orchestrator
-#EventID            100[SUCCESS]-101[WARNING]-102[ERROR]
-#Message            Error Message  [Trace]
-#EventType          Error-Warning-Information
-
+#
 #-----------------------------------------------
+Set-StrictMode -Version 2
+
+
+#---------------FUNCTIONS--------------------------------
 function AppendLog ([string]$Message)
 {
     $script:CurrentAction = $Message
     $script:TraceLog += ((Get-Date).ToString() + "`t" + $Message + " `r`n")
 }
+
+#------------- DECLARATIONS --------------------------
+
+[String]$Scriptname="SCORCH_PS_Wrapper_64.ps1"
+[int]$Scriptversion=1.1
+[string]$script:TraceLog=''
+[string]$Result='Success'
 [String]$trace=""
-[String]$ErrorMessage=""
+[String]$EMessage=""
+[String]$ELine=""
+[String]$ELNum=""
+[String]$EInnermessage=""
 $stopwatch=  [system.diagnostics.stopwatch]::New()
 
-#------------- Define Parameters ---------------
+#------------- Define Pipeline Parameters Here ---------------
 
 
-[String]$Eventlogsource=''
-[String]$EventlogName=''
-[int]$EventID=1
-[String]$EventType= ''
-[String]$message=''
-[int16]$catagory=1
-
-<#--- TEST DATA ONLY -----
-$Eventlogsource='Scorch'
-$EventlogName='Orchestrator'
-$EventID=102
-$EventType= 'Error'
-$message='This is a test SCORCH event'
-$catagory=1
-#>
-
+#----------------------------------------------------
 
 Try{
 
@@ -44,23 +38,16 @@ Try{
     AppendLog "Script $scriptname version $Scriptversion now executing @ $timestart in PowerShell version [$($PSVersionTable.PSVersion.ToString())] session in a [$([IntPtr]::Size * 8)] bit process"
     AppendLog "Running as user [$([Environment]::UserDomainName)\$([Environment]::UserName)] on host [$($env:COMPUTERNAME)]"
     
+#--------------------------- Insert code Here ----------------------------------------
 
-Write-EventLog -LogName $EventlogName `
--Source $Eventlogsource `
--EventID $EventID `
--EntryType $EventType `
--Message "$message" `
--Category $catagory `
--RawData 10,201 `
--ea Stop
-
-AppendLog  "Successfully Wrote to the [$EventlogName] log inserting a [$EventType] from source [$Eventlogsource] with message: [$Message]"
-
-$ResultStatus = "Success"
-
-#throw "Bad thing happened"
+throw "Bad thing happened"
 #$a=1/0
 #Get-content 'c:\temp\test.txt' -ea stop
+
+#-------------------------------------------------------------------------------------
+
+
+$ResultStatus = "Success"
 
 $stopwatch.Stop()
 $scripttime=$stopwatch.Elapsed.totalseconds
@@ -86,7 +73,7 @@ Catch{
     $stopwatch.Stop() 
     $scripttime=$stopwatch.Elapsed.totalseconds
     
-        if($ErrorMessage.Length -gt 0)
+        if($EMessage.Length -gt 0)
         {AppendLog "Exiting Powershell session with result [$ResultStatus] and error message [$EMessage], script runtime: $scripttime seconds @ $timestart"}
         else
         { AppendLog "Exiting Powershell session with result [$ResultStatus], script runtime: $scripttime seconds @ $timestart"}
@@ -96,4 +83,4 @@ Catch{
 
 }
 
-#$trace
+$trace
