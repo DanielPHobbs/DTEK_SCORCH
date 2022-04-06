@@ -1,8 +1,11 @@
 #-----------------------------------------------
-#   SCORCH 'Standard Powershell Activity Wrapper' 
-# Examples:
+#   SCORCH 'Standard Powershell Activity Wrapper Template' 
+#   Author: D.Hobbs
+#   Date:   06/04/2022
+#   Examples:
 #
 #-----------------------------------------------
+# Disable this line for Production release
 Set-StrictMode -Version 2
 
 
@@ -18,7 +21,7 @@ function AppendLog ([string]$Message)
 [String]$Scriptname="SCORCH_PS_Wrapper_64.ps1"
 [int]$Scriptversion=1.1
 [string]$script:TraceLog=''
-[string]$Result='Success'
+[string]$ResultStatus='Success'
 [String]$trace=""
 [String]$EMessage=""
 [String]$ELine=""
@@ -28,27 +31,28 @@ $stopwatch=  [system.diagnostics.stopwatch]::New()
 
 #------------- Define Pipeline Parameters Here ---------------
 
+#$param1 ="<FromPipeline>"
+#$param2 ="<FromPipeline>"
+#$param3 ="<FromPipeline>"
 
 #----------------------------------------------------
 
 Try{
-
     $stopwatch.Start()
     $timestart=(Get-Date).ToString()
     AppendLog "Script $scriptname version $Scriptversion now executing @ $timestart in PowerShell version [$($PSVersionTable.PSVersion.ToString())] session in a [$([IntPtr]::Size * 8)] bit process"
     AppendLog "Running as user [$([Environment]::UserDomainName)\$([Environment]::UserName)] on host [$($env:COMPUTERNAME)]"
     
-#--------------------------- Insert code Here ----------------------------------------
+#--------------------------- Insert Required code Here ----------------------------------------
 
 throw "Bad thing happened"
 #$a=1/0
 #Get-content 'c:\temp\test.txt' -ea stop
 
-#-------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------
 
 
 $ResultStatus = "Success"
-
 $stopwatch.Stop()
 $scripttime=$stopwatch.Elapsed.totalseconds
 
@@ -79,6 +83,8 @@ Catch{
         { AppendLog "Exiting Powershell session with result [$ResultStatus], script runtime: $scripttime seconds @ $timestart"}
         
         $trace=$script:TraceLog
+
+        # ------------ Add Cleanups here -----------------
         $error.clear()
 
 }
