@@ -45,9 +45,10 @@ Try{
     
 #--------------------------- Insert Required code Here ----------------------------------------
 
-throw "Bad thing happened"
+#throw "Bad thing happened"
 #$a=1/0
 #Get-content 'c:\temp\test.txt' -ea stop
+#get-aduser -identity 'fred'
 
 #----------------------------------------------------------------------------------------------
 
